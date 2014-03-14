@@ -5,7 +5,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import mobi.dzs.android.bluetooth.BluetoothSppClient;
-import mobi.dzs.android.util.DynamicStorage;
+import mobi.dzs.android.util.PreferencesStorage;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -59,7 +59,7 @@ public class BaseCommActivity extends BaseActivity
 	/**对象:引用全局的蓝牙连接对象*/
 	protected BluetoothSppClient mBSC = null;
 	/**对象:引用全局的动态存储对象*/
-	protected DynamicStorage mDS = null;
+	protected PreferencesStorage mDS = null;
 	
 	/**未设限制的AsyncTask线程池(重要)*/
 	protected static ExecutorService FULL_TASK_EXECUTOR;
@@ -75,8 +75,8 @@ public class BaseCommActivity extends BaseActivity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		this.mBSC = ((globalPool)this.getApplicationContext()).mBSC;
-		this.mDS =  ((globalPool)this.getApplicationContext()).mDS;
+		this.mBSC = ((BtSppApp)this.getApplicationContext()).mBtSppCli;
+		this.mDS =  ((BtSppApp)this.getApplicationContext()).mDS;
 		
 		if (null == this.mBSC && !this.mBSC.isConnect())
 		{	//当进入时，发现连接已丢失，则直接返回主界面
@@ -115,7 +115,7 @@ public class BaseCommActivity extends BaseActivity
 		long lTmp = 0;
 		if (null != this.mtvTxdCount)
 		{
-			lTmp = this.mBSC.getTxd();
+			lTmp = this.mBSC.getTxdCount();
 	    	this.mtvTxdCount.setText(String.format(getString(R.string.templet_txd, lTmp)));
 	    	lTmp = this.mBSC.getConnectHoldTime();
 	    	this.mtvHoleRun.setText(String.format(getString(R.string.templet_hold_time, lTmp)));
@@ -132,7 +132,7 @@ public class BaseCommActivity extends BaseActivity
 		long lTmp = 0;
 		if (null != this.mtvRxdCount)
 		{
-			lTmp = this.mBSC.getRxd();
+			lTmp = this.mBSC.getRxdCount();
 	    	this.mtvRxdCount.setText(String.format(getString(R.string.templet_rxd, lTmp)));
 	    	lTmp = this.mBSC.getConnectHoldTime();
 	    	this.mtvHoleRun.setText(String.format(getString(R.string.templet_hold_time, lTmp)));

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/actMain_menu_rescan"
+        android:showAsAction="ifRoom"
+        android:title="@string/actMain_menu_rescan"/>
+    <item
+        android:id="@+id/actMain_menu_exit"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_close"/>
+    <item
+        android:id="@+id/actMain_menu_about"
+        android:showAsAction="never"
+        android:title="@string/menu_about"/>
+
+</menu>

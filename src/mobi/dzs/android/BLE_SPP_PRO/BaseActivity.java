@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import mobi.dzs.android.util.LocalIOTools;
+import mobi.dzs.android.util.LocalIoTools;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -47,7 +47,7 @@ public class BaseActivity extends Activity
 		sFileName = (new SimpleDateFormat("MMddHHmmss", Locale.getDefault())).format(new Date()) + ".txt";
 		//生成最终的保存路径
 		sPath = sRoot.concat("/").concat(this.getString(R.string.app_name));
-		if (LocalIOTools.coverByte2File(sPath, sFileName, sData.getBytes()))
+		if (LocalIoTools.coverByteToFile(sPath, sFileName, sData.getBytes()))
 		{
 			String sMsg = ("save to:").concat(sPath).concat("/").concat(sFileName);
 			Toast.makeText(this, sMsg, Toast.LENGTH_LONG).show();//提示 文件保存成功

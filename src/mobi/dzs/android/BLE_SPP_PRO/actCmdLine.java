@@ -294,9 +294,9 @@ public class actCmdLine extends BaseCommActivity
 	            	mDS.saveStorage();
 	            	showEndFlg(); //显示当前结束符的设置信息
             	}
-            	else if (CHexConver.checkHexStr(sHexEndFlg))
+            	else if (CHexConver.isHexStr(sHexEndFlg))
             	{
-	            	msEndFlg = CHexConver.hexStr2Str(sHexEndFlg);
+	            	msEndFlg = CHexConver.hexToStr(sHexEndFlg);
 	            	mBSC.setReceiveStopFlg(msEndFlg); //设置结束符
 	            	//记住当前设置的模式
 	            	mDS.setVal(getLocalClassName(), SUB_KEY_END_FLG, sHexEndFlg);
@@ -315,7 +315,7 @@ public class actCmdLine extends BaseCommActivity
     	adCtrl.show();
     	
     	/*初始化输入模式值*/
-    	etVal.setText(CHexConver.str2HexStr(msEndFlg)); //初始化输入默认值
+    	etVal.setText(CHexConver.strToHex(msEndFlg)); //初始化输入默认值
     	if (msEndFlg.equals(msEND_FLGS[0]))
     		rb_rn.setChecked(true);
     	else if (msEndFlg.equals(msEND_FLGS[1]))
@@ -341,7 +341,7 @@ public class actCmdLine extends BaseCommActivity
 				}
 				else
 					etVal.setEnabled(true); //可修改
-				etVal.setText(CHexConver.str2HexStr(msEndFlg));//输出HEX字符串
+				etVal.setText(CHexConver.strToHex(msEndFlg));//输出HEX字符串
 			}
     	});
     	/*结束符的输入框的监听*/
@@ -351,7 +351,7 @@ public class actCmdLine extends BaseCommActivity
 			public void afterTextChanged(Editable arg0)
 			{
 				String sEndFlg = etVal.getText().toString().trim();
-				if (sEndFlg.isEmpty() || CHexConver.checkHexStr(sEndFlg))
+				if (sEndFlg.isEmpty() || CHexConver.isHexStr(sEndFlg))
 				{
 					etVal.setTextColor(android.graphics.Color.BLACK);
 					adCtrl.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
@@ -394,7 +394,7 @@ public class actCmdLine extends BaseCommActivity
     	else if (sHexEndFlg.isEmpty())
     		this.msEndFlg = ""; //未设置结束符
     	else
-    		this.msEndFlg = CHexConver.hexStr2Str(sHexEndFlg);
+    		this.msEndFlg = CHexConver.hexToStr(sHexEndFlg);
     	this.showEndFlg(); //显示当前结束符的设置信息
     	this.mBSC.setReceiveStopFlg(this.msEndFlg); //设置结束符
     }
@@ -427,7 +427,7 @@ public class actCmdLine extends BaseCommActivity
     		else
     		{
     			sTmp = String.format(getString(R.string.actCmdLine_msg_helper), 
-    					"("+ CHexConver.str2HexStr(msEndFlg) +")");
+    					"("+ CHexConver.strToHex(msEndFlg) +")");
     		}
     		this.mtvDataView.setText(sTmp);
     	}

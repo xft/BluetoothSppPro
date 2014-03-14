@@ -107,7 +107,7 @@
 	<string name="msg_save_file_fail">Failed to save the file</string>
 	<string name="msg_receive_data_wating">Waiting to receive&#8230;\n</string>
 	<string name="msg_receive_data_stop">Receiver terminated</string>
-	<string name="msg_msg_bt_connect_lost">Bluetooth device communications connection is lost, try to reconnect</string>
+	<string name="msg_bt_connect_lost">Bluetooth device communications connection is lost, try to reconnect</string>
 	<string name="msg_helper_endflg_nothing">End flag is not set. Click [Set end flag] set;\n</string>
 	
 	<string name="tips_click_to_hide">Click hidden</string>

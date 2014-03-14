@@ -224,7 +224,7 @@ public class actByteStream extends BaseCommActivity
     	String sSend = this.mactvInput.getText().toString().trim();
     	if (BluetoothSppClient.IO_MODE_HEX == this.mbtOutputMode)
     	{	//当使用HEX发送时，对发送内容做检查
-    		if (!CHexConver.checkHexStr(sSend))
+    		if (!CHexConver.isHexStr(sSend))
     		{
     			Toast.makeText(this, //提示 本次发送失败
 				   getString(R.string.msg_not_hex_string),
@@ -281,7 +281,7 @@ public class actByteStream extends BaseCommActivity
 				if (!mBSC.isConnect())//检查连接是否丢失
 					return (int)CONNECT_LOST; 
 				
-				if (mBSC.getReceiveBufLen() > 0)
+				if (mBSC.getRecvBufLen() > 0)
 					this.publishProgress(mBSC.Receive());
 				
 				try
