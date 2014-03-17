@@ -23,8 +23,6 @@ import android.os.SystemClock;
  * 
  * @version 1.0 2013-03-21
  * @author JerryLi (lijian@dzs.mobi)
- * @version 1.1 2014-03-14
- * @author xiaofenger.tan (xiaofenger.tan@gmail.com)
  * @see 抽象类，不要对其直接实例化。sendData()需要继承后再定义对外公开方法。<br />
  *      使用本类，需要有以下两个权限<br />
  *      &lt;uses-permission android:name="android.permission.BLUETOOTH"/&gt;<br />
@@ -229,7 +227,7 @@ public abstract class BtSppComm {
 
 		/* 开始连接蓝牙设备 */
 		final BluetoothDevice BtDev = mBtAdapter.getRemoteDevice(mMac);
-		final UUID uuidSPP = UUID.fromString(BluetoothSppClient.SPP_UUID);
+		final UUID uuidSPP = UUID.fromString(BtSppClient.SPP_UUID);
 
 		synchronized (mBtRdWrLock) {
 			try {

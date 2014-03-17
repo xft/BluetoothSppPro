@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import mobi.dzs.android.bluetooth.BluetoothSppClient;
+import mobi.dzs.android.bluetooth.BtSppClient;
+import mobi.dzs.android.bluetooth.BtSppClient.BtIOMode;
 import mobi.dzs.android.util.PreferencesStorage;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -52,12 +53,12 @@ public class BaseCommActivity extends BaseActivity
 	private TextView mtvHoleRun = null;
 	
 	/** 输入模式 */
-	protected byte mbtInputMode = BluetoothSppClient.IO_MODE_STRING;
+	protected BtIOMode mbtInputMode = BtIOMode.STR;
 	/** 输出模式 */
-	protected byte mbtOutputMode = BluetoothSppClient.IO_MODE_STRING;
+	protected BtIOMode mbtOutputMode = BtIOMode.STR;
 	
 	/**对象:引用全局的蓝牙连接对象*/
-	protected BluetoothSppClient mBSC = null;
+	protected BtSppClient mBSC = null;
 	/**对象:引用全局的动态存储对象*/
 	protected PreferencesStorage mDS = null;
 	
@@ -160,13 +161,13 @@ public class BaseCommActivity extends BaseActivity
 	 * */
 	protected void initIO_Mode()
 	{
-		this.mbtInputMode = (byte)this.mDS.getIntVal(KEY_IO_MODE, "input_mode");
-		if (this.mbtInputMode == 0)
-			this.mbtInputMode = BluetoothSppClient.IO_MODE_STRING;
+		mbtInputMode = BtIOMode.valueOf(mDS.getIntVal(KEY_IO_MODE, "input_mode"));
+		if (mbtInputMode == null)
+			mbtInputMode = BtIOMode.STR;
 		
-		this.mbtOutputMode = (byte)this.mDS.getIntVal(KEY_IO_MODE, "output_mode");
-		if (this.mbtOutputMode == 0)
-			this.mbtOutputMode = BluetoothSppClient.IO_MODE_STRING;
+		this.mbtOutputMode = BtIOMode.valueOf(mDS.getIntVal(KEY_IO_MODE, "output_mode"));
+		if (mbtOutputMode == null)
+			mbtOutputMode = BtIOMode.STR;
     	mBSC.setRxdMode(mbtInputMode);
     	mBSC.setTxdMode(mbtOutputMode);
 	}
@@ -192,11 +193,11 @@ public class BaseCommActivity extends BaseActivity
     	rbOutHex =(RadioButton)view.findViewById(R.id.rb_io_mode_set_out_hex);
 
     	/*初始化输入模式值*/
-    	if (BluetoothSppClient.IO_MODE_STRING == this.mbtInputMode)//输入设置
+    	if (BtIOMode.STR == mbtInputMode)//输入设置
     		rbInChar.setChecked(true);
     	else
     		rbInHex.setChecked(true);
-    	if (BluetoothSppClient.IO_MODE_STRING == this.mbtOutputMode)//输出设置
+    	if (BtIOMode.STR == mbtOutputMode)//输出设置
     		rbOutChar.setChecked(true);
     	else
     		rbOutHex.setChecked(true);
@@ -208,11 +209,11 @@ public class BaseCommActivity extends BaseActivity
             public void onClick(DialogInterface dialog, int which)
             {
             	//设置输入输出的模式
-            	mbtInputMode = (rbInChar.isChecked())? BluetoothSppClient.IO_MODE_STRING : BluetoothSppClient.IO_MODE_HEX;
-            	mbtOutputMode = (rbOutChar.isChecked())? BluetoothSppClient.IO_MODE_STRING : BluetoothSppClient.IO_MODE_HEX;
+            	mbtInputMode = (rbInChar.isChecked())? BtIOMode.STR : BtIOMode.HEX;
+            	mbtOutputMode = (rbOutChar.isChecked())? BtIOMode.STR : BtIOMode.HEX;
             	//记住当前设置的模式
-            	mDS.setVal(KEY_IO_MODE, "input_mode", mbtInputMode);
-            	mDS.setVal(KEY_IO_MODE, "output_mode", mbtOutputMode);
+            	mDS.setVal(KEY_IO_MODE, "input_mode", mbtInputMode.value());
+            	mDS.setVal(KEY_IO_MODE, "output_mode", mbtOutputMode.value());
             	mDS.saveStorage();
             	mBSC.setRxdMode(mbtInputMode);
             	mBSC.setTxdMode(mbtOutputMode);

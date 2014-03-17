@@ -1,12 +1,12 @@
 package mobi.dzs.android.BLE_SPP_PRO;
 
-import mobi.dzs.android.bluetooth.BluetoothSppClient;
+import mobi.dzs.android.bluetooth.BtSppClient;
 import mobi.dzs.android.util.PreferencesStorage;
 import android.app.Application;
 
 public class BtSppApp extends Application {
 	/** 蓝牙SPP通信连接对象 */
-	public BluetoothSppClient mBtSppCli = null;
+	public BtSppClient mBtSppCli = null;
 	/** 动态公共存储对象 */
 	public PreferencesStorage mDS = null;
 	/** 应用自引用 */
@@ -32,7 +32,7 @@ public class BtSppApp extends Application {
 		if (null != mBtSppCli)
 			return true;
 
-		mBtSppCli = new BluetoothSppClient(mac);
+		mBtSppCli = new BtSppClient(mac);
 		if (!mBtSppCli.createConn()) {
 			mBtSppCli = null;
 			return false;

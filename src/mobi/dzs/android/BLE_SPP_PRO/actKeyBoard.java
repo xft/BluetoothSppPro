@@ -2,7 +2,7 @@ package mobi.dzs.android.BLE_SPP_PRO;
 
 import java.util.Hashtable;
 
-import mobi.dzs.android.bluetooth.BluetoothSppClient;
+import mobi.dzs.android.bluetooth.BtSppClient.BtIOMode;
 import mobi.dzs.android.control.button.ButtonPassListener;
 import mobi.dzs.android.control.button.RepeatingButton;
 import mobi.dzs.android.util.CHexConver;
@@ -375,7 +375,7 @@ public class actKeyBoard extends BaseCommActivity
             	if (sHexEndFlg.isEmpty())
             	{	//未设置终止符
             		msEndFlg = new String();
-            		mBSC.setReceiveStopFlg(msEndFlg); //设置结束符
+            		mBSC.setRecvStopFlg(msEndFlg); //设置结束符
 	            	mDS.setVal(getLocalClassName(), SUB_KEY_END_FLG, sHexEndFlg);
 	            	mDS.saveStorage();
 	            	showEndFlg(); //显示当前结束符的设置信息
@@ -383,7 +383,7 @@ public class actKeyBoard extends BaseCommActivity
             	else if (CHexConver.isHexStr(sHexEndFlg))
             	{
 	            	msEndFlg = CHexConver.hexToStr(sHexEndFlg);
-	            	mBSC.setReceiveStopFlg(msEndFlg); //设置结束符
+	            	mBSC.setRecvStopFlg(msEndFlg); //设置结束符
 	            	//记住当前设置的模式
 	            	mDS.setVal(getLocalClassName(), SUB_KEY_END_FLG, sHexEndFlg);
 	            	mDS.saveStorage();
@@ -636,7 +636,7 @@ public class actKeyBoard extends BaseCommActivity
     	else
     		this.msEndFlg = CHexConver.hexToStr(sHexEndFlg);
     	this.showEndFlg(); //显示当前结束符的设置信息
-    	this.mBSC.setReceiveStopFlg(this.msEndFlg); //设置结束符
+    	this.mBSC.setRecvStopFlg(this.msEndFlg); //设置结束符
     }
     
     /**
@@ -707,9 +707,9 @@ public class actKeyBoard extends BaseCommActivity
 			String sSend = sData;
 			int iRet = 0;
 			if (!this.msEndFlg.isEmpty()) //加入结束符的处理
-				iRet = this.mBSC.Send(sSend.concat(this.msEndFlg));
+				iRet = this.mBSC.send(sSend.concat(this.msEndFlg));
 			else
-				iRet = this.mBSC.Send(sSend);
+				iRet = this.mBSC.send(sSend);
 			
 			if (iRet >= 0) //检查通信状态
 			{	//通信正常
@@ -777,7 +777,7 @@ public class actKeyBoard extends BaseCommActivity
 			public void afterTextChanged(Editable s)
 			{
 				String sSend = tvSendVal.getText().toString().trim();
-				if (BluetoothSppClient.IO_MODE_HEX == mbtOutputMode)
+				if (BtIOMode.HEX == mbtOutputMode)
 				{	//16进制值时对输入做验证
 					if (CHexConver.isHexStr(sSend))
 					{
@@ -925,14 +925,14 @@ public class actKeyBoard extends BaseCommActivity
 		@Override
 		protected Integer doInBackground(String... arg0)
 		{
-			mBSC.Receive(); //首次启动调用一次以启动接收线程
+			mBSC.recv(); //首次启动调用一次以启动接收线程
 			while(!mbThreadStop)
 			{
 				if (!mBSC.isConnect())
 					return CONNECT_LOST; //检查连接是否丢失
 				
 				if (mBSC.getRecvBufLen() > 0)
-					this.publishProgress(mBSC.Receive());
+					this.publishProgress(mBSC.recv());
 				
 				try
 				{

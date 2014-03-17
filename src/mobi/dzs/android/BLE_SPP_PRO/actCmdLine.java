@@ -76,7 +76,7 @@ public class actCmdLine extends BaseCommActivity
 					if (sCmd.length() > 0)
 					{
 						mactvInput.setText(""); //清除输入框
-				    	if (mBSC.Send(sCmd.concat(msEndFlg)) >= 0)
+				    	if (mBSC.send(sCmd.concat(msEndFlg)) >= 0)
 				    	{
 				    		append2DataView(TYPE_TXD, sCmd); //显示数据
 				    		addAutoComplateVal(sCmd, mactvInput); //追加自动完成值
@@ -289,7 +289,7 @@ public class actCmdLine extends BaseCommActivity
             	if (sHexEndFlg.isEmpty())
             	{
 	            	msEndFlg = new String();
-	            	mBSC.setReceiveStopFlg(msEndFlg); //设置结束符
+	            	mBSC.setRecvStopFlg(msEndFlg); //设置结束符
 	            	mDS.setVal(getLocalClassName(), SUB_KEY_END_FLG, sHexEndFlg);
 	            	mDS.saveStorage();
 	            	showEndFlg(); //显示当前结束符的设置信息
@@ -297,7 +297,7 @@ public class actCmdLine extends BaseCommActivity
             	else if (CHexConver.isHexStr(sHexEndFlg))
             	{
 	            	msEndFlg = CHexConver.hexToStr(sHexEndFlg);
-	            	mBSC.setReceiveStopFlg(msEndFlg); //设置结束符
+	            	mBSC.setRecvStopFlg(msEndFlg); //设置结束符
 	            	//记住当前设置的模式
 	            	mDS.setVal(getLocalClassName(), SUB_KEY_END_FLG, sHexEndFlg);
 	            	mDS.saveStorage();
@@ -396,7 +396,7 @@ public class actCmdLine extends BaseCommActivity
     	else
     		this.msEndFlg = CHexConver.hexToStr(sHexEndFlg);
     	this.showEndFlg(); //显示当前结束符的设置信息
-    	this.mBSC.setReceiveStopFlg(this.msEndFlg); //设置结束符
+    	this.mBSC.setRecvStopFlg(this.msEndFlg); //设置结束符
     }
     
     /**
@@ -470,13 +470,13 @@ public class actCmdLine extends BaseCommActivity
 		@Override
 		protected Integer doInBackground(String... arg0)
 		{
-			mBSC.Receive(); //首次启动调用一次以启动接收线程
+			mBSC.recv(); //首次启动调用一次以启动接收线程
 			while(!mbThreadStop)
 			{
 				if (!mBSC.isConnect())
 					return (int)CONNECT_LOST; //检查连接是否丢失
 				
-				this.publishProgress(mBSC.ReceiveStopFlg());
+				this.publishProgress(mBSC.recvStopFlg());
 			}
 			return (int)THREAD_END;
 		}

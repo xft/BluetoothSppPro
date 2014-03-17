@@ -1,6 +1,6 @@
 package mobi.dzs.android.BLE_SPP_PRO;
 
-import mobi.dzs.android.bluetooth.BluetoothSppClient;
+import mobi.dzs.android.bluetooth.BtSppClient.BtIOMode;
 import mobi.dzs.android.util.CHexConver;
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -222,7 +222,7 @@ public class actByteStream extends BaseCommActivity
     public void onClickBtnSend(View c)
     {
     	String sSend = this.mactvInput.getText().toString().trim();
-    	if (BluetoothSppClient.IO_MODE_HEX == this.mbtOutputMode)
+    	if (BtIOMode.HEX == mbtOutputMode)
     	{	//当使用HEX发送时，对发送内容做检查
     		if (!CHexConver.isHexStr(sSend))
     		{
@@ -235,7 +235,7 @@ public class actByteStream extends BaseCommActivity
     	
     	this.mibtnSend.setEnabled(false);// 禁用发送按钮
 //    	sSend += "\r\n"; 
-    	if (this.mBSC.Send(sSend) >= 0)
+    	if (this.mBSC.send(sSend) >= 0)
     	{
     		this.refreshTxdCount(); //刷新发送数据计值
     		this.mibtnSend.setEnabled(true); //发送成功恢复发送按钮
@@ -275,14 +275,14 @@ public class actByteStream extends BaseCommActivity
 		@Override
 		protected Integer doInBackground(String... arg0)
 		{
-			mBSC.Receive(); //首次启动调用一次以启动接收线程
+			mBSC.recv(); //首次启动调用一次以启动接收线程
 			while(!mbThreadStop)
 			{
 				if (!mBSC.isConnect())//检查连接是否丢失
 					return (int)CONNECT_LOST; 
 				
 				if (mBSC.getRecvBufLen() > 0)
-					this.publishProgress(mBSC.Receive());
+					this.publishProgress(mBSC.recv());
 				
 				try
 				{
