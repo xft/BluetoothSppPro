@@ -721,9 +721,9 @@ public class actKeyBoard extends BaseCommActivity
 			else
 			{	//链接丢失
 				Toast.makeText(actKeyBoard.this, //提示 连接丢失
-					   getString(R.string.msg_msg_bt_connect_lost),
+					   getString(R.string.msg_bt_connect_lost),
 					   Toast.LENGTH_LONG).show();
-				this.mtvRecView.append(this.getString(R.string.msg_msg_bt_connect_lost) + "\n");
+				this.mtvRecView.append(this.getString(R.string.msg_bt_connect_lost) + "\n");
 			}
 			this.refreshTxdCount();//刷新发送值
 			this.autoScroll(); //滚屏处理
@@ -964,7 +964,7 @@ public class actKeyBoard extends BaseCommActivity
 		public void onPostExecute(Integer result)
 		{
 			if (CONNECT_LOST == result) //通信连接丢失
-				mtvRecView.append(getString(R.string.msg_msg_bt_connect_lost));
+				mtvRecView.append(getString(R.string.msg_bt_connect_lost));
 			else
 				mtvRecView.append(getString(R.string.msg_receive_data_stop));//提示接收终止
 			refreshHoldTime(); //刷新数据统计状态条-运行时间

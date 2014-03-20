@@ -84,9 +84,9 @@ public class actCmdLine extends BaseCommActivity
 				    	else
 				    	{
 							Toast.makeText(actCmdLine.this, //提示 连接丢失
-							   getString(R.string.msg_msg_bt_connect_lost),
+							   getString(R.string.msg_bt_connect_lost),
 							   Toast.LENGTH_LONG).show();
-							mtvDataView.append(getString(R.string.msg_msg_bt_connect_lost));
+							mtvDataView.append(getString(R.string.msg_bt_connect_lost));
 							mactvInput.setEnabled(false);//禁用命令输入行
 				    	}
 				    	refreshTxdCount(); //刷新接收数据统计值
@@ -502,7 +502,7 @@ public class actCmdLine extends BaseCommActivity
 		public void onPostExecute(Integer result)
 		{
 			if (CONNECT_LOST == result) //通信连接丢失
-				mtvDataView.append(getString(R.string.msg_msg_bt_connect_lost));
+				mtvDataView.append(getString(R.string.msg_bt_connect_lost));
 			else
 				mtvDataView.append(getString(R.string.msg_receive_data_stop));//提示接收终止
 			

@@ -244,7 +244,7 @@ public class actByteStream extends BaseCommActivity
     	else
     	{
 			Toast.makeText(this, //提示 连接丢失
-					   getString(R.string.msg_msg_bt_connect_lost),
+					   getString(R.string.msg_bt_connect_lost),
 					   Toast.LENGTH_LONG).show();
 			this.mactvInput.setEnabled(false); //禁用输入框
     	}
@@ -314,7 +314,7 @@ public class actByteStream extends BaseCommActivity
 		public void onPostExecute(Integer result)
 		{
 			if (CONNECT_LOST == result) //connection is lost
-				mtvReceive.append(getString(R.string.msg_msg_bt_connect_lost));
+				mtvReceive.append(getString(R.string.msg_bt_connect_lost));
 			else
 				mtvReceive.append(getString(R.string.msg_receive_data_stop));//Tip receive termination
 			mibtnSend.setEnabled(false); //Disable the Send button
