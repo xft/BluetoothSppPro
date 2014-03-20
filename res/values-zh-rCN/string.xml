@@ -93,6 +93,7 @@
     <string name="menu_button_event_down">按下时发送</string>
     <string name="menu_button_event_repeat">长按持续发送</string>
     <string name="menu_about">关于</string>
+    <string name="menu_settings">设置</string>
 	
 	<string name="device_type_bredr">BR/EDR Bluetooth</string>
 	<string name="device_type_ble">Low Energy Bluetooth</string>

@@ -81,7 +81,7 @@ public class CHexConver {
 		StringBuilder hexStr = new StringBuilder("");
 		
 		for (int i = 0; i < b.length; i++) {
-			hexStr.append(mHexChars[b[i] >>> 4]);
+			hexStr.append(mHexChars[b[i] & 0xFF >> 4]);
 			hexStr.append(mHexChars[b[i] & 0x0F]);
 			hexStr.append(' ');
 		}

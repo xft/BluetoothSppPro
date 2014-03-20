@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="bt_dev">Bluetooth Device</string>
+	<string name="bt_dev_name">Bluetooth Device Name</string>
+	<string name="bt_dev_name_summ">Set Bluetooth device name.</string>
+	<string name="bt_dev_mac">Bluetooth Device MAC</string>
+	<string name="bt_dev_mac_summ">Set Bluetooth device hardware address.</string>
+</resources>

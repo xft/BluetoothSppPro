@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="bt_dev">蓝牙设备</string>
+	<string name="bt_dev_name">名称</string>
+	<string name="bt_dev_name_summ">蓝牙设备名。</string>
+	<string name="bt_dev_mac">蓝牙 MAC</string>
+	<string name="bt_dev_mac_summ">蓝牙硬件地址。</string>
+</resources>

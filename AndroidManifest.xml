@@ -58,6 +58,11 @@
             android:name=".actAbout"
             android:label="@string/actAbout_name"
             android:launchMode="singleTop" />
+        
+        <activity
+            android:name=".Settings"
+            android:label="@string/bt_dev"
+            android:launchMode="singleTop" />
     </application>
 
 </manifest>

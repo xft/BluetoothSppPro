@@ -73,17 +73,15 @@ public class BaseCommActivity extends BaseActivity
 	 * 页面构造
 	 * */
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.mBSC = ((BtSppApp)this.getApplicationContext()).mBtSppCli;
-		this.mDS =  ((BtSppApp)this.getApplicationContext()).mDS;
-		
-		if (null == this.mBSC && !this.mBSC.isConnect())
-		{	//当进入时，发现连接已丢失，则直接返回主界面
-        	this.setResult(Activity.RESULT_CANCELED); //返回到主界面
-        	this.finish();
-        	return;
+		this.mBSC = ((BtSppApp) this.getApplicationContext()).mBtSppCli;
+		this.mDS = ((BtSppApp) this.getApplicationContext()).mDS;
+
+		if (mBSC == null || !mBSC.isConnect()) { // 当进入时，发现连接已丢失，则直接返回主界面
+			setResult(Activity.RESULT_CANCELED); // 返回到主界面
+			finish();
+			return;
 		}
 	}
 	

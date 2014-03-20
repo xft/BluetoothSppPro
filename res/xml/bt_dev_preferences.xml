@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="bt_dev"
+        android:title="@string/bt_dev" >
+
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="bluetooth_device_name"
+            android:summary="@string/bt_dev_name_summ"
+            android:title="@string/bt_dev_name" />
+
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="bluetooth_device_mac"
+            android:summary="@string/bt_dev_mac_summ"
+            android:title="@string/bt_dev_mac" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

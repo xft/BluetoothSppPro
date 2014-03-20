@@ -2,6 +2,7 @@ package mobi.dzs.android.BLE_SPP_PRO;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Set;
 
 import mobi.dzs.android.bluetooth.BluetoothCtrl;
 
@@ -9,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -150,6 +152,9 @@ public class actMain extends Activity {
 			// 打开关于页面
 			openAbout();
 			return true;
+		case R.id.actMain_menu_settings:
+			openSettings();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -174,7 +179,7 @@ public class actMain extends Activity {
 		initActivityView();
 
 		// 得到全局对象的引用
-		mBtSppApp = BtSppApp.getApplication(); 
+		mBtSppApp = BtSppApp.getApp(); 
 
 		// 启动蓝牙设备
 		new startBluetoothDeviceTask().execute(""); 
@@ -213,6 +218,11 @@ public class actMain extends Activity {
 		// 进入蓝牙设备搜索界面
 		Intent intent = new Intent(this, actDiscovery.class);
 		startActivityForResult(intent, REQUEST_DISCOVERY); // 等待返回搜索结果
+	}
+	
+	private void openSettings() {
+		Intent intent = new Intent(this, Settings.class);
+		startActivity(intent);
 	}
 
 	/**
@@ -272,19 +282,7 @@ public class actMain extends Activity {
 
 				showDeviceInfo();// 显示设备信息
 
-				// 如果设备未配对，显示配对操作
-				if (mDevInfoTxt.get("BOND").equals(getString(R.string.actDiscovery_bond_nothing))) {
-					mBtnPair.setVisibility(View.VISIBLE); // 显示配对按钮
-					mBtnComm.setVisibility(View.GONE); // 隐藏通信按钮
-					// 提示要显示Service UUID先建立配对
-					mSrvUUID.setText(getString(R.string.actMain_tv_hint_service_uuid_not_bond));
-				} else {
-					// 已存在配对关系，建立与远程设备的连接
-					mBtDev = mBtAdapter.getRemoteDevice(mDevInfoTxt.get("MAC"));
-					showServiceUUIDs();// 显示设备的Service UUID列表
-					mBtnPair.setVisibility(View.GONE); // 隐藏配对按钮
-					mBtnComm.setVisibility(View.VISIBLE); // 显示通信按钮
-				}
+				showPairBtnIfNeed(mDevInfoTxt.get("MAC"));
 			} else if (Activity.RESULT_CANCELED == resultCode) {
 				// 未操作，结束程序
 				finish();
@@ -306,6 +304,31 @@ public class actMain extends Activity {
 		default:
 			break;
 		}
+	}
+	
+	private void showPairBtnIfNeed(String mac) {
+		Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
+		// If there are paired devices
+		if (pairedDevices.size() > 0) {
+		    // Loop through paired devices
+		    for (BluetoothDevice device : pairedDevices) {
+		        // Add the name and address to an array adapter to show in a ListView
+		    	if (mac.equals(device.getAddress())) {
+		    		// 已存在配对关系，建立与远程设备的连接
+					mBtDev = mBtAdapter.getRemoteDevice(mac);
+					showServiceUUIDs();// 显示设备的Service UUID列表
+					mBtnPair.setVisibility(View.GONE); // 隐藏配对按钮
+					mBtnComm.setVisibility(View.VISIBLE); // 显示通信按钮
+		    		return;
+		    	}
+		    }
+		}
+		
+		// 如果设备未配对，显示配对操作
+		mBtnPair.setVisibility(View.VISIBLE); // 显示配对按钮
+		mBtnComm.setVisibility(View.GONE); // 隐藏通信按钮
+		// 提示要显示Service UUID先建立配对
+		mSrvUUID.setText(getString(R.string.actMain_tv_hint_service_uuid_not_bond));
 	}
 
 	/**
@@ -443,8 +466,23 @@ public class actMain extends Activity {
 							}
 						});
 				builder.create().show();
-			} else if (RET_BULETOOTH_IS_START == result) { // 蓝牙启动成功
-				openDiscovery(); // 进入搜索页面
+			} else if (RET_BULETOOTH_IS_START == result) {
+				// 蓝牙启动成功
+				/* 读取保存的蓝牙设备信息 */
+				String savedBtMac = mBtSppApp.getSavedBtDevMac();
+				if (!TextUtils.isEmpty(savedBtMac)) {
+					mDevInfo.setText(String.format(
+							getString(R.string.actMain_device_info),
+							mBtSppApp.getSavedBtDevName(), savedBtMac, null,
+							null, null, null));
+					mBtDev = mBtAdapter.getRemoteDevice(savedBtMac);
+					mDevInfoView.setVisibility(View.VISIBLE);
+					mBtnComm.setVisibility(View.VISIBLE);
+					showPairBtnIfNeed(savedBtMac);
+					return;
+//				} else {
+//					openDiscovery(); // 进入搜索页面
+				}
 			}
 		}
 	}
@@ -523,6 +561,8 @@ public class actMain extends Activity {
 				mDevInfoTxt.put("BOND", getString(R.string.actDiscovery_bond_bonded));// 显示已绑定
 				showDeviceInfo(); // 刷新配置信息
 				showServiceUUIDs(); // 显示远程设备提供的服务
+				/* 保存名字和MAC */
+				saveDevInfo();
 			} else { // 在指定时间内未完成配对
 				Toast.makeText(actMain.this, R.string.actMain_msg_bluetooth_Bond_fail, Toast.LENGTH_LONG).show();
 				try {
@@ -661,5 +701,13 @@ public class actMain extends Activity {
 				Toast.makeText(actMain.this, R.string.actMain_msg_device_connect_fail, Toast.LENGTH_SHORT).show();
 			}
 		}
+	}
+	
+	/**
+	 * 保存成功配对的蓝牙设备信息
+	 */
+	private void saveDevInfo() {
+		BtSppApp.getApp().saveBtDevName(mDevInfoTxt.get("NAME"));
+		BtSppApp.getApp().saveBtDevMac(mDevInfoTxt.get("MAC"));
 	}
 }
